@@ -1,49 +1,118 @@
 // src/components/Header.jsx
 import React, { useState, useEffect } from 'react';
-import { Navbar, Nav, Container } from 'react-bootstrap';
+import { Navbar, Nav, Container, Button } from 'react-bootstrap';
+import { motion } from 'framer-motion';
+import { Menu, X, Phone } from 'lucide-react';
 
 const Header = () => {
   const [scrolled, setScrolled] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => {
-      if (window.scrollY > 50) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
-      }
+    const handleScroll = () => {
+      const isScrolled = window.scrollY > 50;
+      setScrolled(isScrolled);
     };
 
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const navItems = [
+    { label: 'Home', href: '#home' },
+    { label: 'About', href: '#about' },
+    { label: 'Services', href: '#services' },
+    { label: 'Gallery', href: '#gallery' },
+    { label: 'Contact', href: '#contact' },
+  ];
+
   return (
-    <Navbar 
-      expand="lg" 
-      fixed="top" 
-      className={`custom-navbar ${scrolled ? 'navbar-scrolled' : ''}`}
+    <motion.nav
+      className={`premium-navbar ${scrolled ? 'scrolled' : ''}`}
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      transition={{ duration: 0.6 }}
     >
       <Container>
-        <Navbar.Brand href="#home" className="navbar-brand-custom">
-          <div className="logo-text">
-            <h3>Paramount Global Trading</h3>
-            <small>PGT</small>
+        <div className="navbar-content">
+          <motion.div 
+            className="navbar-brand"
+            whileHover={{ scale: 1.05 }}
+            transition={{ duration: 0.2 }}
+          >
+            <div className="brand-container">
+              <div className="brand-icon">
+                <div className="icon-inner"></div>
+              </div>
+              <div className="brand-text">
+                <h3>Paramount Global Trading</h3>
+                <span>Excellence in Trading</span>
+              </div>
+            </div>
+          </motion.div>
+
+          <div className="navbar-menu d-none d-lg-flex">
+            {navItems.map((item, index) => (
+              <motion.a
+                key={item.label}
+                href={item.href}
+                className="nav-link"
+                whileHover={{ y: -2 }}
+                transition={{ duration: 0.2 }}
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                style={{ delay: `${index * 0.1}s` }}
+              >
+                {item.label}
+              </motion.a>
+            ))}
           </div>
-        </Navbar.Brand>
-        
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="ms-auto">
-            <Nav.Link href="#home">Home</Nav.Link>
-            <Nav.Link href="#about">About</Nav.Link>
-            <Nav.Link href="#services">Services</Nav.Link>
-            <Nav.Link href="#gallery">Gallery</Nav.Link>
-            <Nav.Link href="#contact">Contact</Nav.Link>
-          </Nav>
-        </Navbar.Collapse>
+
+          <div className="navbar-actions d-none d-lg-flex">
+            <Button className="cta-button" size="sm">
+              <Phone size={16} className="me-2" />
+              Get Quote
+            </Button>
+          </div>
+
+          <button
+            className="mobile-menu-toggle d-lg-none"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          >
+            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
+
+        {/* Mobile Menu */}
+        <motion.div
+          className={`mobile-menu ${mobileMenuOpen ? 'active' : ''}`}
+          initial={{ opacity: 0, height: 0 }}
+          animate={{ 
+            opacity: mobileMenuOpen ? 1 : 0, 
+            height: mobileMenuOpen ? 'auto' : 0 
+          }}
+          transition={{ duration: 0.3 }}
+        >
+          {navItems.map((item, index) => (
+            <motion.a
+              key={item.label}
+              href={item.href}
+              className="mobile-nav-link"
+              onClick={() => setMobileMenuOpen(false)}
+              initial={{ opacity: 0, x: -50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: index * 0.1 }}
+            >
+              {item.label}
+            </motion.a>
+          ))}
+          <Button className="cta-button mobile-cta">
+            <Phone size={16} className="me-2" />
+            Get Quote
+          </Button>
+        </motion.div>
       </Container>
-    </Navbar>
+    </motion.nav>
   );
 };
 
