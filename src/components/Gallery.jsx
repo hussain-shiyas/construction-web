@@ -1,39 +1,29 @@
 // src/components/Gallery.jsx
 import React, { useState } from 'react';
-import {
-  Container,
-  Title,
-  Group,
-  Button,
-  SimpleGrid,
-  Card,
-  Box,
-  Text,
-  Stack
-} from '@mantine/core';
+import { Container, Row, Col, Button, Card } from 'react-bootstrap';
 
 const Gallery = () => {
   const [activeFilter, setActiveFilter] = useState('All');
   
   const filters = [
     'All',
-    'Oil & Gas',
-    'Manufacturing', 
-    'Construction',
-    'Health & Safety',
-    'Uniforms',
-    'Network Solutions'
+    'Oil & Gas Industry',
+    'Manufacturing Industry', 
+    'Construction Industry',
+    'Occupational Health & Safety',
+    'Uniforms & Workwear',
+    'Network Product Solutions'
   ];
 
   const galleryItems = [
-    { id: 1, category: 'Oil & Gas', title: 'Oil & Gas Equipment' },
-    { id: 2, category: 'Manufacturing', title: 'Manufacturing Tools' },
-    { id: 3, category: 'Construction', title: 'Construction Materials' },
-    { id: 4, category: 'Health & Safety', title: 'Safety Equipment' },
-    { id: 5, category: 'Uniforms', title: 'Professional Workwear' },
-    { id: 6, category: 'Network Solutions', title: 'Network Infrastructure' },
-    { id: 7, category: 'Oil & Gas', title: 'Pipeline Equipment' },
-    { id: 8, category: 'Manufacturing', title: 'Industrial Machinery' },
+    { id: 1, category: 'Oil & Gas Industry', title: 'Oil & Gas Equipment', image: '/api/placeholder/300/200' },
+    { id: 2, category: 'Manufacturing Industry', title: 'Manufacturing Tools', image: '/api/placeholder/300/200' },
+    { id: 3, category: 'Construction Industry', title: 'Construction Materials', image: '/api/placeholder/300/200' },
+    { id: 4, category: 'Occupational Health & Safety', title: 'Safety Equipment', image: '/api/placeholder/300/200' },
+    { id: 5, category: 'Uniforms & Workwear', title: 'Professional Workwear', image: '/api/placeholder/300/200' },
+    { id: 6, category: 'Network Product Solutions', title: 'Network Infrastructure', image: '/api/placeholder/300/200' },
+    { id: 7, category: 'Oil & Gas Industry', title: 'Pipeline Equipment', image: '/api/placeholder/300/200' },
+    { id: 8, category: 'Manufacturing Industry', title: 'Industrial Machinery', image: '/api/placeholder/300/200' },
   ];
 
   const filteredItems = activeFilter === 'All' 
@@ -41,79 +31,53 @@ const Gallery = () => {
     : galleryItems.filter(item => item.category === activeFilter);
 
   return (
-    <Box id="gallery" py={80}>
-      <Container size="xl">
-        <Stack gap="xl">
-          <Title 
-            order={2} 
-            ta="center" 
-            size="2.5rem"
-            c="brand.6"
-            mb="xl"
-          >
-            Gallery
-          </Title>
-          
-          <Group justify="center" gap="sm">
-            {filters.map((filter) => (
-              <Button
-                key={filter}
-                variant={activeFilter === filter ? "filled" : "outline"}
-                color="brand"
-                size="sm"
-                radius="xl"
-                onClick={() => setActiveFilter(filter)}
-                style={{
-                  fontSize: '0.875rem',
-                  fontWeight: activeFilter === filter ? 600 : 500,
-                }}
-              >
-                {filter}
-              </Button>
-            ))}
-          </Group>
-          
-          <SimpleGrid 
-            cols={{ base: 1, sm: 2, md: 3, lg: 4 }} 
-            spacing="lg"
-          >
-            {filteredItems.map((item) => (
-              <Card 
-                key={item.id}
-                shadow="sm" 
-                padding="lg" 
-                radius="md"
-                style={{
-                  transition: 'transform 0.3s ease',
-                  '&:hover': {
-                    transform: 'scale(1.02)',
-                  },
-                }}
-              >
-                <Box
-                  style={{
-                    height: 200,
-                    background: 'linear-gradient(45deg, #f8f9fa, #e9ecef)',
-                    borderRadius: '8px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    marginBottom: '1rem',
-                  }}
+    <section id="gallery" className="gallery-section py-5">
+      <Container>
+        <Row className="mb-5">
+          <Col lg={12} className="text-center">
+            <h2 className="section-title">Gallery</h2>
+            <p className="section-subtitle">
+              Explore our work across different industries
+            </p>
+          </Col>
+        </Row>
+        
+        <Row className="mb-4">
+          <Col lg={12}>
+            <div className="gallery-filters text-center">
+              {filters.map((filter, index) => (
+                <Button
+                  key={index}
+                  variant={activeFilter === filter ? "primary" : "outline-primary"}
+                  size="sm"
+                  className="me-2 mb-2 filter-btn"
+                  onClick={() => setActiveFilter(filter)}
                 >
-                  <Text c="dimmed" ta="center" fw={500}>
-                    {item.title}
-                  </Text>
-                </Box>
-                <Text size="sm" c="brand.6" fw={500}>
-                  {item.category}
-                </Text>
+                  {filter}
+                </Button>
+              ))}
+            </div>
+          </Col>
+        </Row>
+        
+        <Row>
+          {filteredItems.map((item) => (
+            <Col lg={3} md={6} className="mb-4" key={item.id}>
+              <Card className="gallery-item">
+                <div className="gallery-image-placeholder">
+                  <span>{item.title}</span>
+                </div>
+                <Card.Body>
+                  <Card.Text className="gallery-category">
+                    {item.category}
+                  </Card.Text>
+                </Card.Body>
               </Card>
-            ))}
-          </SimpleGrid>
-        </Stack>
+            </Col>
+          ))}
+        </Row>
       </Container>
-    </Box>
+    </section>
   );
 };
 

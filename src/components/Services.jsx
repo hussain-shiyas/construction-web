@@ -1,129 +1,85 @@
 // src/components/Services.jsx
 import React from 'react';
-import {
-  Container,
-  Title,
-  SimpleGrid,
-  Card,
-  Text,
-  Box,
-  Stack
-} from '@mantine/core';
-import {
-  IconDroplet,
-  IconBuilding,
-  IconTool,
-  IconShield,
-  IconShirt,
-  IconNetwork
-} from '@tabler/icons-react';
+import { Container, Row, Col, Card } from 'react-bootstrap';
+import { 
+  FaOilCan, 
+  FaIndustry, 
+  FaHardHat, 
+  FaShieldAlt, 
+  FaTshirt, 
+  FaNetworkWired 
+} from 'react-icons/fa';
 
 const Services = () => {
   const services = [
     {
       title: "Oil & Gas Industry",
       description: "We understand the challenges of this industry and are committed to delivering exceptional service to our clients.",
-      icon: IconDroplet,
-      color: "blue"
+      icon: <FaOilCan />,
+      color: "primary"
     },
     {
       title: "Manufacturing Industry", 
       description: "Our team of experts has extensive experience in the manufacturing industry, and we collaborate closely with our clients to comprehend their unique requirements.",
-      icon: IconBuilding,
-      color: "teal"
+      icon: <FaIndustry />,
+      color: "success"
     },
     {
       title: "Construction Industry",
       description: "PGT provides essential materials and equipment to construction companies to ensure successful project completion.",
-      icon: IconTool,
-      color: "orange"
+      icon: <FaHardHat />,
+      color: "warning"
     },
     {
       title: "Occupational Health & Safety",
       description: "We understand the importance of safety in the workplace and are committed to providing exceptional services to our clients.",
-      icon: IconShield,
-      color: "red"
+      icon: <FaShieldAlt />,
+      color: "danger"
     },
     {
       title: "Uniforms & Workwear",
       description: "As a uniform and workwear supplier, we provide high-quality apparel that is designed to meet the unique needs and demands of various industries.",
-      icon: IconShirt,
-      color: "violet"
+      icon: <FaTshirt />,
+      color: "info"
     },
     {
       title: "Network Product Solutions",
       description: "At PGT, we are dedicated to providing top-notch Network Product Solutions tailored to meet your connectivity needs.",
-      icon: IconNetwork,
-      color: "green"
+      icon: <FaNetworkWired />,
+      color: "secondary"
     }
   ];
 
   return (
-    <Box id="services" py={80} bg="gray.0">
-      <Container size="xl">
-        <Stack gap="xl">
-          <Title 
-            order={2} 
-            ta="center" 
-            size="2.5rem"
-            c="brand.6"
-            mb="xl"
-          >
-            Dedicated to Serving
-          </Title>
-          
-          <SimpleGrid 
-            cols={{ base: 1, sm: 2, lg: 3 }} 
-            spacing="xl"
-          >
-            {services.map((service, index) => {
-              const IconComponent = service.icon;
-              return (
-                <Card 
-                  key={index}
-                  shadow="md" 
-                  padding="xl" 
-                  radius="lg"
-                  style={{
-                    transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-                    '&:hover': {
-                      transform: 'translateY(-5px)',
-                      boxShadow: 'var(--mantine-shadow-lg)',
-                    },
-                  }}
-                >
-                  <Stack align="center" gap="md">
-                    <Box
-                      style={{
-                        background: `var(--mantine-color-${service.color}-1)`,
-                        borderRadius: '50%',
-                        padding: '1rem',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                      }}
-                    >
-                      <IconComponent 
-                        size={48} 
-                        color={`var(--mantine-color-${service.color}-6)`}
-                      />
-                    </Box>
-                    
-                    <Title order={3} ta="center" c="brand.6" size="lg">
-                      {service.title}
-                    </Title>
-                    
-                    <Text ta="center" c="dimmed">
-                      {service.description}
-                    </Text>
-                  </Stack>
-                </Card>
-              );
-            })}
-          </SimpleGrid>
-        </Stack>
+    <section id="services" className="services-section py-5">
+      <Container>
+        <Row className="mb-5">
+          <Col lg={12} className="text-center">
+            <h2 className="section-title">Dedicated to Serving</h2>
+            <p className="section-subtitle">
+              We provide comprehensive solutions across multiple industries
+            </p>
+          </Col>
+        </Row>
+        <Row>
+          {services.map((service, index) => (
+            <Col lg={4} md={6} className="mb-4" key={index}>
+              <Card className="service-card h-100">
+                <Card.Body className="text-center">
+                  <div className={`service-icon text-${service.color}`}>
+                    {service.icon}
+                  </div>
+                  <Card.Title className="service-title">{service.title}</Card.Title>
+                  <Card.Text className="service-description">
+                    {service.description}
+                  </Card.Text>
+                </Card.Body>
+              </Card>
+            </Col>
+          ))}
+        </Row>
       </Container>
-    </Box>
+    </section>
   );
 };
 

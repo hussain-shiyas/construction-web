@@ -1,168 +1,155 @@
 // src/components/Contact.jsx
-import React from 'react';
-import {
-  Container,
-  Title,
-  SimpleGrid,
-  Card,
-  TextInput,
-  Textarea,
-  Button,
-  Text,
-  Stack,
-  Group,
-  Box,
-  ThemeIcon
-} from '@mantine/core';
-import { useForm } from '@mantine/form';
-import { notifications } from '@mantine/notifications';
-import { IconMapPin, IconMail, IconPhone, IconCheck } from '@tabler/icons-react';
+import React, { useState } from 'react';
+import { Container, Row, Col, Card, Form, Button, Alert } from 'react-bootstrap';
+import { FaMapMarkerAlt, FaEnvelope, FaPhone } from 'react-icons/fa';
 
 const Contact = () => {
-  const form = useForm({
-    initialValues: {
-      name: '',
-      email: '',
-      subject: '',
-      message: '',
-    },
-    validate: {
-      name: (value) => value.length < 2 ? 'Name must have at least 2 letters' : null,
-      email: (value) => /^\S+@\S+$/.test(value) ? null : 'Invalid email',
-      subject: (value) => value.length < 3 ? 'Subject must have at least 3 letters' : null,
-      message: (value) => value.length < 10 ? 'Message must have at least 10 characters' : null,
-    },
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    subject: '',
+    message: ''
   });
+  const [showAlert, setShowAlert] = useState(false);
 
-  const handleSubmit = (values) => {
-    console.log(values);
-    notifications.show({
-      title: 'Message Sent!',
-      message: 'Thank you for your message. We will get back to you soon.',
-      color: 'green',
-      icon: <IconCheck size={16} />,
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
     });
-    form.reset();
   };
 
-  const contactInfo = [
-    {
-      icon: IconMapPin,
-      title: 'Location',
-      details: [
-        'CR. 2051238344',
-        'Office No.41, 2nd Floor, Port Gate Building',
-        'A Khalidiyah Al Janubiyah, Dammaam 32221,',
-        'Saudi Arabia'
-      ]
-    },
-    {
-      icon: IconMail,
-      title: 'Email',
-      details: [
-        'info@pmgtgroup.com',
-        'sales@pmgtgroup.com'
-      ]
-    },
-    {
-      icon: IconPhone,
-      title: 'Phone',
-      details: ['+966 53 335 0205']
-    }
-  ];
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setShowAlert(true);
+    setTimeout(() => setShowAlert(false), 5000);
+    setFormData({ name: '', email: '', subject: '', message: '' });
+  };
 
   return (
-    <Box id="contact" py={80} bg="gray.0">
-      <Container size="xl">
-        <Title 
-          order={2} 
-          ta="center" 
-          size="2.5rem"
-          c="brand.6"
-          mb="xl"
-        >
-          Contact Us
-        </Title>
+    <section id="contact" className="contact-section py-5">
+      <Container>
+        <Row className="mb-5">
+          <Col lg={12} className="text-center">
+            <h2 className="section-title">Contact</h2>
+            <p className="section-subtitle">
+              Get in touch with us for any inquiries
+            </p>
+          </Col>
+        </Row>
         
-        <SimpleGrid 
-          cols={{ base: 1, md: 2 }} 
-          spacing="xl"
-        >
-          <Stack gap="lg">
-            {contactInfo.map((info, index) => {
-              const IconComponent = info.icon;
-              return (
-                <Card key={index} shadow="sm" p="xl" radius="lg">
-                  <Group mb="md">
-                    <ThemeIcon size="lg" color="brand" variant="light">
-                      <IconComponent size={24} />
-                    </ThemeIcon>
-                    <Title order={3} c="brand.6">
-                      {info.title}
-                    </Title>
-                  </Group>
-                  <Stack gap="xs">
-                    {info.details.map((detail, idx) => (
-                      <Text key={idx} size="sm" c="dimmed">
-                        {detail}
-                      </Text>
-                    ))}
-                  </Stack>
-                </Card>
-              );
-            })}
-          </Stack>
+        <Row>
+          <Col lg={6} className="mb-4">
+            <div className="contact-info">
+              <Card className="contact-info-card mb-4">
+                <Card.Body>
+                  <div className="contact-item">
+                    <FaMapMarkerAlt className="contact-icon text-primary me-3" />
+                    <div>
+                      <h5>Location:</h5>
+                      <p className="mb-1">CR. 2051238344</p>
+                      <p className="mb-1">Office No.41, 2nd Floor, Port Gate Building</p>
+                      <p className="mb-1">A Khalidiyah Al Janubiyah, Dammaam 32221,</p>
+                      <p className="mb-0">Saudi Arabia</p>
+                    </div>
+                  </div>
+                </Card.Body>
+              </Card>
+              
+              <Card className="contact-info-card mb-4">
+                <Card.Body>
+                  <div className="contact-item">
+                    <FaEnvelope className="contact-icon text-primary me-3" />
+                    <div>
+                      <h5>Email:</h5>
+                      <p className="mb-1">info@pmgtgroup.com</p>
+                      <p className="mb-0">sales@pmgtgroup.com</p>
+                    </div>
+                  </div>
+                </Card.Body>
+              </Card>
+              
+              <Card className="contact-info-card">
+                <Card.Body>
+                  <div className="contact-item">
+                    <FaPhone className="contact-icon text-primary me-3" />
+                    <div>
+                      <h5>Call:</h5>
+                      <p className="mb-0">+966 53 335 0205</p>
+                    </div>
+                  </div>
+                </Card.Body>
+              </Card>
+            </div>
+          </Col>
           
-          <Card shadow="md" p="xl" radius="lg">
-            <Title order={3} mb="lg" c="brand.6">
-              Send us a Message
-            </Title>
-            
-            <form onSubmit={form.onSubmit(handleSubmit)}>
-              <Stack gap="md">
-                <TextInput
-                  label="Your Name"
-                  placeholder="Enter your name"
-                  required
-                  {...form.getInputProps('name')}
-                />
+          <Col lg={6}>
+            <Card className="contact-form-card">
+              <Card.Body>
+                <h4 className="mb-4">Send Message</h4>
                 
-                <TextInput
-                  label="Email Address"
-                  placeholder="Enter your email"
-                  required
-                  {...form.getInputProps('email')}
-                />
+                {showAlert && (
+                  <Alert variant="success">
+                    Message sent successfully! We'll get back to you soon.
+                  </Alert>
+                )}
                 
-                <TextInput
-                  label="Subject"
-                  placeholder="Message subject"
-                  required
-                  {...form.getInputProps('subject')}
-                />
-                
-                <Textarea
-                  label="Message"
-                  placeholder="Your message"
-                  minRows={4}
-                  required
-                  {...form.getInputProps('message')}
-                />
-                
-                <Button 
-                  type="submit" 
-                  color="brand" 
-                  size="md"
-                  style={{ marginTop: '1rem' }}
-                >
-                  Send Message
-                </Button>
-              </Stack>
-            </form>
-          </Card>
-        </SimpleGrid>
+                <Form onSubmit={handleSubmit}>
+                  <Form.Group className="mb-3">
+                    <Form.Control
+                      type="text"
+                      placeholder="Your Name"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleChange}
+                      required
+                    />
+                  </Form.Group>
+                  
+                  <Form.Group className="mb-3">
+                    <Form.Control
+                      type="email"
+                      placeholder="Your Email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      required
+                    />
+                  </Form.Group>
+                  
+                  <Form.Group className="mb-3">
+                    <Form.Control
+                      type="text"
+                      placeholder="Subject"
+                      name="subject"
+                      value={formData.subject}
+                      onChange={handleChange}
+                      required
+                    />
+                  </Form.Group>
+                  
+                  <Form.Group className="mb-4">
+                    <Form.Control
+                      as="textarea"
+                      rows={5}
+                      placeholder="Your Message"
+                      name="message"
+                      value={formData.message}
+                      onChange={handleChange}
+                      required
+                    />
+                  </Form.Group>
+                  
+                  <Button type="submit" variant="primary" size="lg" className="w-100">
+                    Send Message
+                  </Button>
+                </Form>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
       </Container>
-    </Box>
+    </section>
   );
 };
 

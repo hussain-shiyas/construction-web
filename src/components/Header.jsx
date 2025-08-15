@@ -1,79 +1,49 @@
-// src/components/Header.jsx (AppShell Version)
-import React from 'react';
-import {
-  AppShell,
-  Burger,
-  Group,
-  Text,
-  Container,
-  Anchor,
-  NavLink
-} from '@mantine/core';
+// src/components/Header.jsx
+import React, { useState, useEffect } from 'react';
+import { Navbar, Nav, Container } from 'react-bootstrap';
 
-const Header = ({ opened, toggle }) => {
-  const navigation = [
-    { label: 'Home', href: '#home' },
-    { label: 'Services', href: '#services' },
-    { label: 'Gallery', href: '#gallery' },
-    { label: 'Contact', href: '#contact' },
-  ];
+const Header = () => {
+  const [scrolled, setScrolled] = useState(false);
 
-  const handleNavClick = (href) => {
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
+  useEffect(() => {
+    const onScroll = () => {
+      if (window.scrollY > 50) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
+    };
+
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
-    <>
-      <AppShell.Header>
-        <Container size="xl" h="100%">
-          <Group h="100%" justify="space-between">
-            <Text 
-              size="xl" 
-              fw={700} 
-              c="brand.6"
-              style={{ fontSize: '1.5rem' }}
-            >
-              Paramount Global Trading
-            </Text>
-
-            <Group gap="lg" visibleFrom="md">
-              {navigation.map((item) => (
-                <Anchor
-                  key={item.label}
-                  onClick={() => handleNavClick(item.href)}
-                  fw={500}
-                  c="dark.7"
-                  td="none"
-                  style={{ cursor: 'pointer' }}
-                >
-                  {item.label}
-                </Anchor>
-              ))}
-            </Group>
-
-            <Burger 
-              opened={opened} 
-              onClick={toggle} 
-              hiddenFrom="md" 
-              size="sm" 
-            />
-          </Group>
-        </Container>
-      </AppShell.Header>
-
-      <AppShell.Navbar p="md" hiddenFrom="md">
-        {navigation.map((item) => (
-          <NavLink
-            key={item.label}
-            label={item.label}
-            onClick={() => handleNavClick(item.href)}
-          />
-        ))}
-      </AppShell.Navbar>
-    </>
+    <Navbar 
+      expand="lg" 
+      fixed="top" 
+      className={`custom-navbar ${scrolled ? 'navbar-scrolled' : ''}`}
+    >
+      <Container>
+        <Navbar.Brand href="#home" className="navbar-brand-custom">
+          <div className="logo-text">
+            <h3>Paramount Global Trading</h3>
+            <small>PGT</small>
+          </div>
+        </Navbar.Brand>
+        
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="ms-auto">
+            <Nav.Link href="#home">Home</Nav.Link>
+            <Nav.Link href="#about">About</Nav.Link>
+            <Nav.Link href="#services">Services</Nav.Link>
+            <Nav.Link href="#gallery">Gallery</Nav.Link>
+            <Nav.Link href="#contact">Contact</Nav.Link>
+          </Nav>
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
   );
 };
 
